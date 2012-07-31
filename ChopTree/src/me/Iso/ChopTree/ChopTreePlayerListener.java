@@ -4,10 +4,12 @@ import java.lang.reflect.Array;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerListener;
 
-public class ChopTreePlayerListener extends PlayerListener {
+public class ChopTreePlayerListener implements Listener {
 	
 	public static ChopTree plugin;
 	
@@ -17,6 +19,7 @@ public class ChopTreePlayerListener extends PlayerListener {
 	
 	private final ChopTreeFiles files = new ChopTreeFiles(plugin);
 	
+	@EventHandler(priority=EventPriority.NORMAL)
 	public void onPlayerCommandPreprocess (PlayerCommandPreprocessEvent event) {
 		String cmd = event.getMessage().toLowerCase();
 		cmd = cmd.replace("/", "");
@@ -124,14 +127,13 @@ public class ChopTreePlayerListener extends PlayerListener {
 		
 	}
 	
-	@SuppressWarnings("static-access")
 	public boolean denyPermission (String string, Player player) {
 		
 		boolean deny = false;
 		
 		if (string.equals("check")) {
 			if (plugin.options.contains("Permissions")) {
-				if (!plugin.permissionHandler.has(player, "choptree.command.check")) {
+				if (!player.hasPermission("choptree.command.check")) {
 					deny = true;
 				}
 			}
@@ -139,7 +141,7 @@ public class ChopTreePlayerListener extends PlayerListener {
 		
 		if (string.equals("cmd")) {
 			if (plugin.options.contains("Permissions")) {
-				if (!plugin.permissionHandler.has(player, "choptree.command.change")) {
+				if (!player.hasPermission("choptree.command.change")) {
 					deny = true;
 				}
 			} else {
@@ -149,7 +151,7 @@ public class ChopTreePlayerListener extends PlayerListener {
 		
 		if (string.equals("toggle")) {
 			if (plugin.options.contains("Permissions")) {
-				if (!plugin.permissionHandler.has(player, "choptree.command.toggle")) {
+				if (!player.hasPermission("choptree.command.toggle")) {
 					deny = true;
 				}
 			}
@@ -157,7 +159,7 @@ public class ChopTreePlayerListener extends PlayerListener {
 		
 		if (string.equals("full")) {
 			if (plugin.options.contains("Permissions")) {
-				if (!plugin.permissionHandler.has(player, "choptree.command.fullprotect")) {
+				if (!player.hasPermission("choptree.command.fullprotect")) {
 					deny = true;
 				}
 			} else {
@@ -167,7 +169,7 @@ public class ChopTreePlayerListener extends PlayerListener {
 		
 		if (string.equals("protect")) {
 			if (plugin.options.contains("Permissions")) {
-				if (!plugin.permissionHandler.has(player, "choptree.command.protect")) {
+				if (!player.hasPermission("choptree.command.protect")) {
 					deny = true;
 				}
 			} else {
@@ -177,7 +179,7 @@ public class ChopTreePlayerListener extends PlayerListener {
 		
 		if (string.equals("chunk")) {
 			if (plugin.options.contains("Permissions")) {
-				if (!plugin.permissionHandler.has(player, "choptree.command.chunk")) {
+				if (!player.hasPermission("choptree.command.chunk")) {
 					deny = true;
 				}
 			}
@@ -185,7 +187,7 @@ public class ChopTreePlayerListener extends PlayerListener {
 		
 		if (string.equals("reload")) {
 			if (plugin.options.contains("Permisssions")) {
-				if (!plugin.permissionHandler.has(player, "choptree.command.reload")) {
+				if (!player.hasPermission("choptree.command.reload")) {
 					deny = true;
 				}
 			} else if (!player.isOp()) {

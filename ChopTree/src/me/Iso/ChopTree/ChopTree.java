@@ -11,20 +11,12 @@ import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.nijiko.permissions.PermissionHandler;
-import com.nijikokun.bukkit.Permissions.Permissions;
-
-import com.gmail.nossr50.mcMMO;
-
 public class ChopTree extends JavaPlugin {
 	private static final Logger log = Logger.getLogger("Minecraft");
-	public static PermissionHandler permissionHandler;
-	public static mcMMO mcMMO;
+
 	private final ChopTreeBlockListener blockListener = new ChopTreeBlockListener(this);
 	private final ChopTreePlayerListener playerListener = new ChopTreePlayerListener(this);
 	private final ChopTreeFiles files = new ChopTreeFiles(this);
@@ -39,15 +31,14 @@ public class ChopTree extends JavaPlugin {
     public void onEnable() {
 		
     	PluginManager pm = getServer().getPluginManager();
-		pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Event.Priority.Low, this);
-		pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, playerListener, Event.Priority.Normal, this);
+		pm.registerEvents(blockListener, this);
+		pm.registerEvents(playerListener, this);
 		
 		files.initFile();
 		files.initPlayers();
 		files.initChunks();
-		setupPermissions();
 		
-		log.info("ChopTree 1.2 enabled!");
+		log.info("ChopTree 1.23 enabled!");
 	}
     
 	public void onDisable() {
@@ -94,29 +85,9 @@ public class ChopTree extends JavaPlugin {
 		return false;
 	}
 	
-	@SuppressWarnings("static-access")
-	private void setupPermissions() {
-		Plugin permissionsPlugin = this.getServer().getPluginManager().getPlugin("Permissions");
-	      if (this.permissionHandler == null) {
-	    	  if (permissionsPlugin != null) {
-	        	  this.permissionHandler = ((Permissions) permissionsPlugin).getHandler();
-	        	  log.info("[ChopTree] Using Permissions.");
-	        	  options.add("Permissions");
-	          } else {
-	        	  log.info("[ChopTree] Permissions not detected, defaulting to ops.");
-	          }
-	      }
-	}
-	
-	@SuppressWarnings("static-access")
 	public boolean activemcMMO() {
 		if (options.contains("SupportMcmmoIfAvailable")) { 
-			Plugin ChopTree = this.getServer().getPluginManager().getPlugin("mcMMO");
-			if (this.mcMMO == null) {
-				if (ChopTree != null) {
-					return true;
-				}
-			}
+			return this.getServer().getPluginManager().isPluginEnabled("mcMMO");
 		}
 		return false;
 	}
