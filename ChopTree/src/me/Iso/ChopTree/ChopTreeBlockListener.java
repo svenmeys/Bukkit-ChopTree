@@ -338,10 +338,8 @@ public class ChopTreeBlockListener implements Listener {
 	
 	public boolean denyPermission (Player player) {
 		//Permissions check
-		if (plugin.options.contains("Permissions")) {
-			if (!player.hasPermission("choptree.chop")) {
+		if (!player.hasPermission("choptree.chop")) {
 				return true;
-			}
 		}
 		return false;
 	}
@@ -367,7 +365,7 @@ public class ChopTreeBlockListener implements Listener {
 	
 	public boolean denyItem (Player player) {
 
-		if (plugin.options.contains("Permissions") && plugin.options.contains("EnableOverride")) {
+		if (plugin.options.contains("EnableOverride")) {
 			if (player.hasPermission("choptree.override.useanything")) {
 				return false;
 			}
@@ -390,7 +388,7 @@ public class ChopTreeBlockListener implements Listener {
 		
 		if (!plugin.activemcMMO()) return false;
 		
-		if (plugin.options.contains("Permissions") && plugin.options.contains("EnableOverride")) {
+		if (plugin.options.contains("EnableOverride")) {
 			if (player.hasPermission("choptree.override.treefellerneeded")) {
 				return false;
 			}
@@ -408,15 +406,12 @@ public class ChopTreeBlockListener implements Listener {
 	}
 	
 	public boolean isChunkProtected (Player player, Chunk chunk) {
+		if (player.isOp()) return false;
 		
-		if (plugin.options.contains("Permissions")){
-			if (plugin.options.contains("EnableOverride")) {
-				if (player.hasPermission("choptree.override.chunkprotection")) {
-					return false;
-				}
+		if (plugin.options.contains("EnableOverride")) {
+			if (player.hasPermission("choptree.override.chunkprotection")) {
+				return false;
 			}
-		} else {
-			if (player.isOp()) return false;
 		}
 		
 		if (plugin.chunks.contains(chunk.getX() + ":" + chunk.getZ())) {
@@ -443,15 +438,12 @@ public class ChopTreeBlockListener implements Listener {
 	}
 	
 	public boolean isChunkFullyProtected (Player player, Chunk chunk) {
+		if (player.isOp()) return false;
 		
-		if (plugin.options.contains("Permissions")) {
-			if (plugin.options.contains("EnableOverride")) {
-				if (player.hasPermission("choptree.override.chunkprotection")) {
-					return false;
-				}
+		if (plugin.options.contains("EnableOverride")) {
+			if (player.hasPermission("choptree.override.chunkprotection")) {
+				return false;
 			}
-		} else {
-			if (player.isOp()) return false;
 		}
 		
 		if (plugin.chunks.contains(chunk.getX() + ";" + chunk.getZ())) {
@@ -463,7 +455,7 @@ public class ChopTreeBlockListener implements Listener {
 	
 	public boolean interruptWhenBreak (Player player) {
 		
-		if (plugin.options.contains("Permissions") && plugin.options.contains("EnableOverride")) {
+		if (plugin.options.contains("EnableOverride")) {
 			if (player.hasPermission("choptree.override.interruptiftoolbreaks")) {
 				return false;
 			}

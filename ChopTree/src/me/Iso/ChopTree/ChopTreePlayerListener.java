@@ -41,7 +41,7 @@ public class ChopTreePlayerListener implements Listener {
 						|| split[1].equalsIgnoreCase("f")) {
 					event.setCancelled(true);
 					event.setMessage("/_");
-					if (denyPermission("full", event.getPlayer())) return;
+					if (denyPermission("fullprotect", event.getPlayer())) return;
 					files.chunkFullProtect(event.getPlayer(), event.getPlayer().getLocation().getBlock().getChunk());
 					
 				} else if (split[1].toLowerCase().contains("protect")
@@ -66,7 +66,7 @@ public class ChopTreePlayerListener implements Listener {
 					}
 				} else {
 					if (Array.getLength(split) > 2) {
-						if (denyPermission("cmd", event.getPlayer())) {
+						if (denyPermission("change", event.getPlayer())) {
 							event.setCancelled(true);
 							event.setMessage("/_");
 							return;
@@ -128,76 +128,14 @@ public class ChopTreePlayerListener implements Listener {
 	}
 	
 	public boolean denyPermission (String string, Player player) {
+		if (player.isOp()) return false;
 		
-		boolean deny = false;
+		String perm = "choptree.command." + string;
+		if (player.hasPermission(perm)) return false;
 		
-		if (string.equals("check")) {
-			if (plugin.options.contains("Permissions")) {
-				if (!player.hasPermission("choptree.command.check")) {
-					deny = true;
-				}
-			}
-		}
+		player.sendMessage(ChatColor.RED + "[ChopTree] You have no permission to perform this command.");
 		
-		if (string.equals("cmd")) {
-			if (plugin.options.contains("Permissions")) {
-				if (!player.hasPermission("choptree.command.change")) {
-					deny = true;
-				}
-			} else {
-				if (!player.isOp()) deny = true;
-			}
-		}
-		
-		if (string.equals("toggle")) {
-			if (plugin.options.contains("Permissions")) {
-				if (!player.hasPermission("choptree.command.toggle")) {
-					deny = true;
-				}
-			}
-		}
-		
-		if (string.equals("full")) {
-			if (plugin.options.contains("Permissions")) {
-				if (!player.hasPermission("choptree.command.fullprotect")) {
-					deny = true;
-				}
-			} else {
-				if (!player.isOp()) deny = true;
-			}
-		}
-		
-		if (string.equals("protect")) {
-			if (plugin.options.contains("Permissions")) {
-				if (!player.hasPermission("choptree.command.protect")) {
-					deny = true;
-				}
-			} else {
-				if (!player.isOp()) deny = true;
-			}
-		}
-		
-		if (string.equals("chunk")) {
-			if (plugin.options.contains("Permissions")) {
-				if (!player.hasPermission("choptree.command.chunk")) {
-					deny = true;
-				}
-			}
-		}
-		
-		if (string.equals("reload")) {
-			if (plugin.options.contains("Permisssions")) {
-				if (!player.hasPermission("choptree.command.reload")) {
-					deny = true;
-				}
-			} else if (!player.isOp()) {
-				deny = true;
-			}
-		}
-		
-		if (deny) player.sendMessage(ChatColor.RED + "[ChopTree] You have no permission to perform this command.");
-		
-		return deny;
+		return true;
 	}
 	
 }
